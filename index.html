@@ -82,17 +82,17 @@
     <div class="container">
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tools</h3>
-            <button onclick="showTest('solid-colors')">Solid Colors</button>
-            <button onclick="showTest('gradient')">Gradient Test</button>
-            <button onclick="showTest('color-blocks')">Color Blocks</button>
-            <button onclick="showTest('text')">Text Sharpness</button>
+            <button onclick="showTest('solid-colors')">Solid Colors (1)</button>
+            <button onclick="showTest('gradient')">Gradient Test (2)</button>
+            <button onclick="showTest('color-blocks')">Color Blocks (3)</button>
+            <button onclick="showTest('text')">Text Sharpness (4)</button>
             <div id="color-controls" class="hide">
-                <button onclick="setColor('#000000')">Black</button>
-                <button onclick="setColor('#ffffff')">White</button>
-                <button onclick="setColor('#ff0000')">Red</button>
-                <button onclick="setColor('#00ff00')">Green</button>
-                <button onclick="setColor('#0000ff')">Blue</button>
-                <button onclick="setColor('#808080')">50% Gray</button>
+                <button onclick="setColor('#000000')">Black (Q)</button>
+                <button onclick="setColor('#ffffff')">White (W)</button>
+                <button onclick="setColor('#ff0000')">Red (E)</button>
+                <button onclick="setColor('#00ff00')">Green (R)</button>
+                <button onclick="setColor('#0000ff')">Blue (T)</button>
+                <button onclick="setColor('#808080')">50% Gray (Y)</button>
             </div>
         </div>
 
@@ -159,6 +159,23 @@
 
         // Initialize with solid colors test
         showTest('solid-colors');
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toLowerCase();
+            switch(key) {
+                case '1': showTest('solid-colors'); break;
+                case '2': showTest('gradient'); break;
+                case '3': showTest('color-blocks'); break;
+                case '4': showTest('text'); break;
+                case 'q': setColor('#000000'); break;
+                case 'w': setColor('#ffffff'); break;
+                case 'e': setColor('#ff0000'); break;
+                case 'r': setColor('#00ff00'); break;
+                case 't': setColor('#0000ff'); break;
+                case 'y': setColor('#808080'); break;
+            }
+        });
     </script>
 </body>
 </html> 
