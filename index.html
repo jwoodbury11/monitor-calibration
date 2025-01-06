@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitor Calibration Tool</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NDN9RNFL47"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NDN9RNFL47');
+    </script>
     <style>
         body {
             margin: 0;
@@ -178,7 +186,7 @@
             colorBlocksContainer.appendChild(block);
         });
 
-        // Show selected test
+        // Show selected test with analytics
         function showTest(testId) {
             document.querySelectorAll('.test-area').forEach(area => {
                 area.classList.add('hide');
@@ -199,9 +207,14 @@
             if (testId === 'solid-colors') {
                 setColor('#808080');
             }
+
+            // Track test selection in Analytics
+            gtag('event', 'select_test', {
+                'test_type': testId
+            });
         }
 
-        // Set solid color
+        // Set solid color with analytics
         function setColor(color) {
             document.getElementById('solid-colors').style.backgroundColor = color;
             
@@ -222,6 +235,11 @@
             
             const buttonId = 'btn-' + colorToId[color];
             document.getElementById(buttonId).classList.add('selected');
+
+            // Track color selection in Analytics
+            gtag('event', 'select_color', {
+                'color': colorToId[color]
+            });
         }
 
         // Initialize with color blocks test
