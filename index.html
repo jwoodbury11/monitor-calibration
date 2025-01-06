@@ -63,15 +63,25 @@
 
         .controls-buttons {
             display: flex;
+            flex-direction: column;
             gap: 5px;
             min-width: min-content; /* Ensures buttons don't shrink */
         }
 
+        .button-row {
+            display: flex;
+            gap: 5px;
+            min-width: min-content;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* Hide scrollbar but keep functionality */
-        .controls::-webkit-scrollbar {
+        .button-row::-webkit-scrollbar {
             display: none;
         }
-        .controls {
+        .button-row {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
@@ -202,15 +212,17 @@
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tools</h3>
             <div class="controls-buttons">
-                <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
-                    data-tooltip="Compare multiple colors at once">Color Blocks</button>
-                <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
-                    data-tooltip="Full screen single color display">Solid Colors</button>
-                <button id="btn-gradient" onclick="showTest('gradient')" 
-                    data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
-                <button id="btn-text" onclick="showTest('text')" 
-                    data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
-                <div id="color-controls" class="hide">
+                <div class="button-row">
+                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                        data-tooltip="Compare multiple colors at once">Color Blocks</button>
+                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                        data-tooltip="Full screen single color display">Solid Colors</button>
+                    <button id="btn-gradient" onclick="showTest('gradient')" 
+                        data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
+                    <button id="btn-text" onclick="showTest('text')" 
+                        data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
+                </div>
+                <div id="color-controls" class="button-row hide">
                     <button id="btn-black" onclick="setColor('#000000')" 
                         data-tooltip="Pure black - check for deep blacks">Black</button>
                     <button id="btn-white" onclick="setColor('#ffffff')" 
