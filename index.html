@@ -127,6 +127,7 @@
         /* Tooltip styles */
         [data-tooltip] {
             position: relative;
+            touch-action: manipulation; /* Improve touch handling */
         }
 
         [data-tooltip]:before {
@@ -151,7 +152,16 @@
             z-index: 1000;
         }
 
-        [data-tooltip]:hover:before {
+        /* Only show hover tooltips on non-touch devices */
+        @media (hover: hover) {
+            [data-tooltip]:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* Show tooltip when has-tooltip class is present (added by JS for touch) */
+        [data-tooltip].has-tooltip:before {
             opacity: 1;
             visibility: visible;
         }
@@ -302,57 +312,80 @@
             }
         });
 
-        // Add tooltip position handling
+        // Handle tooltips for touch devices
         document.querySelectorAll('[data-tooltip]').forEach(element => {
+            let longPressTimer;
+            const longPressDuration = 500; // 500ms for long press
+
+            // Handle touch start
+            element.addEventListener('touchstart', (e) => {
+                longPressTimer = setTimeout(() => {
+                    element.classList.add('has-tooltip');
+                }, longPressDuration);
+            }, { passive: true });
+
+            // Handle touch end and cancel
+            const cancelTooltip = () => {
+                clearTimeout(longPressTimer);
+                element.classList.remove('has-tooltip');
+            };
+
+            element.addEventListener('touchend', cancelTooltip, { passive: true });
+            element.addEventListener('touchcancel', cancelTooltip, { passive: true });
+            element.addEventListener('touchmove', cancelTooltip, { passive: true });
+
+            // Keep existing mouseenter handler for desktop
             element.addEventListener('mouseenter', (e) => {
-                const tooltip = e.target;
-                const tooltipText = tooltip.getAttribute('data-tooltip');
-                
-                // Create a temporary element to measure tooltip width
-                const temp = document.createElement('div');
-                temp.style.position = 'absolute';
-                temp.style.visibility = 'hidden';
-                temp.style.whiteSpace = 'nowrap';
-                temp.style.padding = '5px 10px';
-                temp.innerHTML = tooltipText;
-                document.body.appendChild(temp);
-                
-                const tooltipWidth = temp.offsetWidth;
-                const elementRect = tooltip.getBoundingClientRect();
-                document.body.removeChild(temp);
+                // Only run on non-touch devices
+                if (window.matchMedia('(hover: hover)').matches) {
+                    const tooltip = e.target;
+                    const tooltipText = tooltip.getAttribute('data-tooltip');
+                    
+                    // Create a temporary element to measure tooltip width
+                    const temp = document.createElement('div');
+                    temp.style.position = 'absolute';
+                    temp.style.visibility = 'hidden';
+                    temp.style.whiteSpace = 'nowrap';
+                    temp.style.padding = '5px 10px';
+                    temp.innerHTML = tooltipText;
+                    document.body.appendChild(temp);
+                    
+                    const tooltipWidth = temp.offsetWidth;
+                    const elementRect = tooltip.getBoundingClientRect();
+                    document.body.removeChild(temp);
 
-                // Check if tooltip would go off the left or right edge
-                const viewportWidth = window.innerWidth;
-                const centerX = elementRect.left + (elementRect.width / 2);
-                const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > viewportWidth;
-                const wouldOverflowLeft = (centerX - (tooltipWidth / 2)) < 0;
-                
-                // Check if tooltip would go off the top
-                const wouldOverflowTop = elementRect.top < 40; // 40px buffer for tooltip height
+                    // Check if tooltip would go off the left or right edge
+                    const viewportWidth = window.innerWidth;
+                    const centerX = elementRect.left + (elementRect.width / 2);
+                    const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > viewportWidth;
+                    const wouldOverflowLeft = (centerX - (tooltipWidth / 2)) < 0;
+                    
+                    // Check if tooltip would go off the top
+                    const wouldOverflowTop = elementRect.top < 40;
 
-                // Apply appropriate CSS
-                if (wouldOverflowTop) {
-                    tooltip.style.setProperty('--tooltip-bottom', 'auto');
-                    tooltip.style.setProperty('--tooltip-top', '100%');
-                    tooltip.style.setProperty('--tooltip-margin', '5px 0 0 0');
-                } else {
-                    tooltip.style.setProperty('--tooltip-bottom', '100%');
-                    tooltip.style.setProperty('--tooltip-top', 'auto');
-                    tooltip.style.setProperty('--tooltip-margin', '0 0 5px 0');
-                }
+                    if (wouldOverflowTop) {
+                        tooltip.style.setProperty('--tooltip-bottom', 'auto');
+                        tooltip.style.setProperty('--tooltip-top', '100%');
+                        tooltip.style.setProperty('--tooltip-margin', '5px 0 0 0');
+                    } else {
+                        tooltip.style.setProperty('--tooltip-bottom', '100%');
+                        tooltip.style.setProperty('--tooltip-top', 'auto');
+                        tooltip.style.setProperty('--tooltip-margin', '0 0 5px 0');
+                    }
 
-                if (wouldOverflowRight) {
-                    tooltip.style.setProperty('--tooltip-left', 'auto');
-                    tooltip.style.setProperty('--tooltip-right', '0');
-                    tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
-                } else if (wouldOverflowLeft) {
-                    tooltip.style.setProperty('--tooltip-left', '0');
-                    tooltip.style.setProperty('--tooltip-right', 'auto');
-                    tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
-                } else {
-                    tooltip.style.setProperty('--tooltip-left', '50%');
-                    tooltip.style.setProperty('--tooltip-right', 'auto');
-                    tooltip.style.setProperty('--tooltip-transform', 'translateX(-50%)');
+                    if (wouldOverflowRight) {
+                        tooltip.style.setProperty('--tooltip-left', 'auto');
+                        tooltip.style.setProperty('--tooltip-right', '0');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
+                    } else if (wouldOverflowLeft) {
+                        tooltip.style.setProperty('--tooltip-left', '0');
+                        tooltip.style.setProperty('--tooltip-right', 'auto');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
+                    } else {
+                        tooltip.style.setProperty('--tooltip-left', '50%');
+                        tooltip.style.setProperty('--tooltip-right', 'auto');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(-50%)');
+                    }
                 }
             });
         });
