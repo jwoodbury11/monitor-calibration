@@ -87,6 +87,22 @@
             background: white;
         }
 
+        .text-contrast-box {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .text-contrast-box.light {
+            background: white;
+            border: 1px solid black;
+        }
+
+        .text-contrast-box.dark {
+            background: black;
+            color: white;
+        }
+
         .hide {
             display: none;
         }
@@ -170,10 +186,10 @@
                 <p style="font-size: 12px">Small text (12px): The quick brown fox jumps over the lazy dog.</p>
                 <p style="font-size: 16px">Normal text (16px): The quick brown fox jumps over the lazy dog.</p>
                 <p style="font-size: 24px">Large text (24px): The quick brown fox jumps over the lazy dog.</p>
-                <div style="margin: 2rem 0; border: 1px solid black;">
+                <div class="text-contrast-box light">
                     <p>Black text on white background</p>
                 </div>
-                <div style="margin: 2rem 0; background: black; color: white;">
+                <div class="text-contrast-box dark">
                     <p>White text on black background</p>
                 </div>
             </div>
