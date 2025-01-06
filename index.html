@@ -266,6 +266,38 @@
             colorBlocksContainer.appendChild(block);
         });
 
+        // Auto-dimming functionality
+        const controls = document.querySelector('.controls');
+        let dimTimer;
+
+        function resetDimTimer() {
+            clearTimeout(dimTimer);
+            controls.style.opacity = '1';
+            
+            // Only set dimming timer on touch devices
+            if (!window.matchMedia('(hover: hover)').matches) {
+                dimTimer = setTimeout(() => {
+                    controls.style.opacity = '0.2';
+                }, 2000);
+            }
+        }
+
+        // Add touch listeners for mobile
+        controls.addEventListener('touchstart', resetDimTimer, { passive: true });
+        controls.addEventListener('touchmove', resetDimTimer, { passive: true });
+        
+        // Keep existing mouse listeners for desktop
+        controls.onmouseenter = () => {
+            if (window.matchMedia('(hover: hover)').matches) {
+                controls.style.opacity = '1';
+            }
+        };
+        controls.onmouseleave = () => {
+            if (window.matchMedia('(hover: hover)').matches) {
+                controls.style.opacity = '0.2';
+            }
+        };
+
         // Show selected test with analytics
         function showTest(testId) {
             document.querySelectorAll('.test-area').forEach(area => {
