@@ -82,23 +82,60 @@
         .hide {
             display: none;
         }
+
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tools</h3>
-            <button id="btn-solid-colors" onclick="showTest('solid-colors')" class="selected">Solid Colors (1)</button>
-            <button id="btn-gradient" onclick="showTest('gradient')">Gradient Test (2)</button>
-            <button id="btn-color-blocks" onclick="showTest('color-blocks')">Color Blocks (3)</button>
-            <button id="btn-text" onclick="showTest('text')">Text Sharpness (4)</button>
+            <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                data-tooltip="Compare multiple colors at once">Color Blocks</button>
+            <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                data-tooltip="Full screen single color display">Solid Colors</button>
+            <button id="btn-gradient" onclick="showTest('gradient')" 
+                data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
+            <button id="btn-text" onclick="showTest('text')" 
+                data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
             <div id="color-controls" class="hide">
-                <button id="btn-black" onclick="setColor('#000000')">Black (Q)</button>
-                <button id="btn-white" onclick="setColor('#ffffff')">White (W)</button>
-                <button id="btn-red" onclick="setColor('#ff0000')">Red (E)</button>
-                <button id="btn-green" onclick="setColor('#00ff00')">Green (R)</button>
-                <button id="btn-blue" onclick="setColor('#0000ff')">Blue (T)</button>
-                <button id="btn-gray" onclick="setColor('#808080')" class="selected">50% Gray (Y)</button>
+                <button id="btn-black" onclick="setColor('#000000')" 
+                    data-tooltip="Pure black - check for deep blacks">Black</button>
+                <button id="btn-white" onclick="setColor('#ffffff')" 
+                    data-tooltip="Pure white - check for brightness">White</button>
+                <button id="btn-red" onclick="setColor('#ff0000')" 
+                    data-tooltip="Pure red - check color accuracy">Red</button>
+                <button id="btn-green" onclick="setColor('#00ff00')" 
+                    data-tooltip="Pure green - check color accuracy">Green</button>
+                <button id="btn-blue" onclick="setColor('#0000ff')" 
+                    data-tooltip="Pure blue - check color accuracy">Blue</button>
+                <button id="btn-gray" onclick="setColor('#808080')" 
+                    data-tooltip="50% gray - check for neutral gray">50% Gray</button>
             </div>
         </div>
 
@@ -187,16 +224,16 @@
             document.getElementById(buttonId).classList.add('selected');
         }
 
-        // Initialize with solid colors test
-        showTest('solid-colors');
+        // Initialize with color blocks test
+        showTest('color-blocks');
 
-        // Add keyboard shortcuts
+        // Add keyboard shortcuts (functionality remains but labels removed)
         document.addEventListener('keydown', (event) => {
             const key = event.key.toLowerCase();
             switch(key) {
-                case '1': showTest('solid-colors'); break;
-                case '2': showTest('gradient'); break;
-                case '3': showTest('color-blocks'); break;
+                case '1': showTest('color-blocks'); break;
+                case '2': showTest('solid-colors'); break;
+                case '3': showTest('gradient'); break;
                 case '4': showTest('text'); break;
                 case 'q': setColor('#000000'); break;
                 case 'w': setColor('#ffffff'); break;
