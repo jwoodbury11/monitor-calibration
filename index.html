@@ -10,7 +10,24 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-NDN9RNFL47');
+        
+        // Enable debug mode for development
+        gtag('config', 'G-NDN9RNFL47', {
+            'debug_mode': true,
+            'send_page_view': true,
+            'page_title': document.title,
+            'page_location': window.location.href
+        });
+
+        // Verify initialization
+        window.addEventListener('load', function() {
+            console.log('GA Initialized:', !!window.ga);
+            // Send a test event
+            gtag('event', 'page_ready', {
+                'event_category': 'system',
+                'event_label': 'initialization'
+            });
+        });
     </script>
     <style>
         body {
