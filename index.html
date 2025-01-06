@@ -49,10 +49,16 @@
             color: white;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
 
         button:hover {
             background: #666;
+        }
+
+        button.selected {
+            background: #2196F3;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
         }
 
         .gradient {
@@ -82,17 +88,17 @@
     <div class="container">
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tools</h3>
-            <button onclick="showTest('solid-colors')">Solid Colors (1)</button>
-            <button onclick="showTest('gradient')">Gradient Test (2)</button>
-            <button onclick="showTest('color-blocks')">Color Blocks (3)</button>
-            <button onclick="showTest('text')">Text Sharpness (4)</button>
+            <button id="btn-solid-colors" onclick="showTest('solid-colors')" class="selected">Solid Colors (1)</button>
+            <button id="btn-gradient" onclick="showTest('gradient')">Gradient Test (2)</button>
+            <button id="btn-color-blocks" onclick="showTest('color-blocks')">Color Blocks (3)</button>
+            <button id="btn-text" onclick="showTest('text')">Text Sharpness (4)</button>
             <div id="color-controls" class="hide">
-                <button onclick="setColor('#000000')">Black (Q)</button>
-                <button onclick="setColor('#ffffff')">White (W)</button>
-                <button onclick="setColor('#ff0000')">Red (E)</button>
-                <button onclick="setColor('#00ff00')">Green (R)</button>
-                <button onclick="setColor('#0000ff')">Blue (T)</button>
-                <button onclick="setColor('#808080')">50% Gray (Y)</button>
+                <button id="btn-black" onclick="setColor('#000000')">Black (Q)</button>
+                <button id="btn-white" onclick="setColor('#ffffff')">White (W)</button>
+                <button id="btn-red" onclick="setColor('#ff0000')">Red (E)</button>
+                <button id="btn-green" onclick="setColor('#00ff00')">Green (R)</button>
+                <button id="btn-blue" onclick="setColor('#0000ff')">Blue (T)</button>
+                <button id="btn-gray" onclick="setColor('#808080')" class="selected">50% Gray (Y)</button>
             </div>
         </div>
 
@@ -142,6 +148,12 @@
             });
             document.getElementById(testId).classList.remove('hide');
             
+            // Update test button states
+            document.querySelectorAll('button[id^="btn-"]').forEach(button => {
+                button.classList.remove('selected');
+            });
+            document.getElementById('btn-' + testId).classList.add('selected');
+            
             // Show/hide color controls
             const colorControls = document.getElementById('color-controls');
             colorControls.classList[testId === 'solid-colors' ? 'remove' : 'add']('hide');
@@ -155,6 +167,24 @@
         // Set solid color
         function setColor(color) {
             document.getElementById('solid-colors').style.backgroundColor = color;
+            
+            // Update color button states
+            document.querySelectorAll('#color-controls button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            
+            // Map color to button ID
+            const colorToId = {
+                '#000000': 'black',
+                '#ffffff': 'white',
+                '#ff0000': 'red',
+                '#00ff00': 'green',
+                '#0000ff': 'blue',
+                '#808080': 'gray'
+            };
+            
+            const buttonId = 'btn-' + colorToId[color];
+            document.getElementById(buttonId).classList.add('selected');
         }
 
         // Initialize with solid colors test
