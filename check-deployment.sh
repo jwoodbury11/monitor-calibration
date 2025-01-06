@@ -1,37 +1,29 @@
 #!/bin/bash
 
-echo "Checking deployment status..."
+echo "🔍 Starting continuous deployment monitor..."
+echo "Press Ctrl+C to stop monitoring"
 
-# Get initial state
-initial_content=$(curl -s "https://monitorcalibrationtool.com?check=$(date +%s)")
-initial_hash=$(echo "$initial_content" | md5 -q)
-echo "Initial hash: $initial_hash"
-echo "Waiting for changes to go live..."
+last_hash=""
+changes_detected=0
 
-attempt=1
 while true; do
-    echo "Attempt $attempt..."
     current_content=$(curl -s "https://monitorcalibrationtool.com?check=$(date +%s)")
     current_hash=$(echo "$current_content" | md5 -q)
-    echo "Current hash: $current_hash"
     
-    if [ "$current_hash" != "$initial_hash" ] && [ ! -z "$current_hash" ]; then
-        echo "✅ Deployment complete!"
-        osascript -e 'display notification "Your site changes are now live!" with title "Deployment Complete"'
-        echo "Your site is live at: https://monitorcalibrationtool.com"
-        break
-    elif [ -z "$current_content" ]; then
-        echo "⚠️  Warning: Could not reach the website. Retrying..."
+    if [ -z "$last_hash" ]; then
+        last_hash=$current_hash
+        echo "📡 Monitoring site: https://monitorcalibrationtool.com"
+        echo "Initial hash: $current_hash"
+    elif [ "$current_hash" != "$last_hash" ]; then
+        changes_detected=$((changes_detected + 1))
+        echo "✨ Change detected! ($changes_detected changes so far)"
+        echo "Previous hash: $last_hash"
+        echo "New hash: $current_hash"
+        osascript -e 'display notification "New changes are live on your site!" with title "Site Updated"'
+        last_hash=$current_hash
     else
-        echo "🟡 Deployment in progress..."
+        echo "👀 Checking for changes... (Last update: $(date '+%H:%M:%S'))"
     fi
     
-    # Exit after 10 minutes (120 attempts at 5 second intervals)
-    if [ $attempt -ge 120 ]; then
-        echo "⚠️  Timeout after 10 minutes. Please check GitHub Pages settings."
-        exit 1
-    fi
-    
-    attempt=$((attempt + 1))
     sleep 5
 done 
