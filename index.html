@@ -198,6 +198,23 @@
             display: none;
         }
 
+        /* Simple tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip:hover:before {
+            content: "Compare multiple colors at once";
+            position: absolute;
+            background: black;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .about-button {
             position: fixed;
             bottom: 10px;
@@ -321,7 +338,7 @@
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
                 <div class="button-row">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected">Color Blocks</button>
+                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected tooltip">Color Blocks</button>
                     <button id="btn-solid-colors" onclick="showTest('solid-colors')">Solid Colors</button>
                     <button id="btn-gradient" onclick="showTest('gradient')">Gradient Test</button>
                     <button id="btn-text" onclick="showTest('text')">Text Sharpness</button>
