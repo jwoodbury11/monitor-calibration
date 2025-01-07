@@ -463,29 +463,36 @@
             clearTimeout(dimTimer);
             controls.style.opacity = '1';
             
-            // Only set dimming timer on touch devices
-            if (!window.matchMedia('(hover: hover)').matches) {
+            // Always set dimming timer except when hovering on desktop
+            if (!window.matchMedia('(hover: hover)').matches || !controls.matches(':hover')) {
                 dimTimer = setTimeout(() => {
                     controls.style.opacity = '0.2';
                 }, 2000);
             }
         }
 
-        // Add touch listeners for mobile
+        // Add interaction listeners for all devices
         controls.addEventListener('touchstart', resetDimTimer, { passive: true });
         controls.addEventListener('touchmove', resetDimTimer, { passive: true });
+        controls.addEventListener('click', resetDimTimer, { passive: true });
+        controls.addEventListener('mousemove', resetDimTimer, { passive: true });
         
         // Keep existing mouse listeners for desktop
-        controls.onmouseenter = () => {
+        controls.addEventListener('mouseenter', () => {
             if (window.matchMedia('(hover: hover)').matches) {
+                clearTimeout(dimTimer);
                 controls.style.opacity = '1';
             }
-        };
-        controls.onmouseleave = () => {
+        });
+        
+        controls.addEventListener('mouseleave', () => {
             if (window.matchMedia('(hover: hover)').matches) {
                 controls.style.opacity = '0.2';
             }
-        };
+        });
+
+        // Initial dim timer
+        resetDimTimer();
 
         // Show selected test with analytics
         function showTest(testId) {
