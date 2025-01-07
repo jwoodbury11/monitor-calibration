@@ -463,12 +463,10 @@
             clearTimeout(dimTimer);
             controls.style.opacity = '1';
             
-            // Always set dimming timer except when hovering on desktop
-            if (!window.matchMedia('(hover: hover)').matches || !controls.matches(':hover')) {
-                dimTimer = setTimeout(() => {
-                    controls.style.opacity = '0.2';
-                }, 2000);
-            }
+            // Always set the dim timer
+            dimTimer = setTimeout(() => {
+                controls.style.opacity = '0.2';
+            }, 2000);
         }
 
         // Add interaction listeners for all devices
@@ -477,22 +475,20 @@
         controls.addEventListener('click', resetDimTimer, { passive: true });
         controls.addEventListener('mousemove', resetDimTimer, { passive: true });
         
-        // Keep existing mouse listeners for desktop
-        controls.addEventListener('mouseenter', () => {
-            if (window.matchMedia('(hover: hover)').matches) {
-                clearTimeout(dimTimer);
+        // Desktop hover behavior
+        if (window.matchMedia('(hover: hover)').matches) {
+            controls.addEventListener('mouseenter', () => {
                 controls.style.opacity = '1';
-            }
-        });
-        
-        controls.addEventListener('mouseleave', () => {
-            if (window.matchMedia('(hover: hover)').matches) {
+                clearTimeout(dimTimer);
+            });
+            
+            controls.addEventListener('mouseleave', () => {
                 controls.style.opacity = '0.2';
-            }
-        });
+            });
+        }
 
-        // Initial dim timer
-        resetDimTimer();
+        // Start dimmed
+        controls.style.opacity = '0.2';
 
         // Show selected test with analytics
         function showTest(testId) {
