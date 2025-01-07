@@ -198,42 +198,33 @@
             display: none;
         }
 
-        /* Tooltip styles - simplified and more reliable */
+        /* Tooltip styles - fixed implementation */
         .tooltip {
             position: relative;
             display: inline-block;
         }
 
-        .tooltip:hover::before {
-            content: attr(data-tooltip);  /* Use the data-tooltip attribute content */
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
             position: absolute;
-            top: -40px;
+            bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: black;
-            color: white;
+            margin-bottom: 5px;
             padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
             border-radius: 4px;
             font-size: 14px;
             white-space: nowrap;
             z-index: 9999;
+            pointer-events: none;
         }
 
-        .test-tooltip-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
-
+        /* Remove test tooltip container and button styles */
+        .test-tooltip-container,
         .test-button {
-            padding: 10px 20px;
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            display: none;
         }
 
         .about-button {
@@ -355,9 +346,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="test-tooltip-container">
-            <button class="test-button tooltip">Hover over me</button>
-        </div>
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
