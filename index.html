@@ -205,7 +205,7 @@
         }
 
         .tooltip:hover::before {
-            content: "This is a test tooltip";
+            content: attr(data-tooltip);  /* Use the data-tooltip attribute content */
             position: absolute;
             top: -40px;
             left: 50%;
@@ -216,6 +216,7 @@
             border-radius: 4px;
             font-size: 14px;
             white-space: nowrap;
+            z-index: 9999;
         }
 
         .test-tooltip-container {
@@ -361,27 +362,27 @@
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
                 <div class="button-row">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected tooltip" 
                         data-tooltip="Compare multiple colors at once">Color Blocks</button>
-                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" class="tooltip"
                         data-tooltip="Full screen single color display">Solid Colors</button>
-                    <button id="btn-gradient" onclick="showTest('gradient')" 
+                    <button id="btn-gradient" onclick="showTest('gradient')" class="tooltip"
                         data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
-                    <button id="btn-text" onclick="showTest('text')" 
+                    <button id="btn-text" onclick="showTest('text')" class="tooltip"
                         data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
                 </div>
                 <div id="color-controls" class="button-row hide">
-                    <button id="btn-black" onclick="setColor('#000000')" 
+                    <button id="btn-black" onclick="setColor('#000000')" class="tooltip"
                         data-tooltip="Pure black - check for deep blacks">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')" 
+                    <button id="btn-white" onclick="setColor('#ffffff')" class="tooltip"
                         data-tooltip="Pure white - check for brightness">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')" 
+                    <button id="btn-red" onclick="setColor('#ff0000')" class="tooltip"
                         data-tooltip="Pure red - check color accuracy">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')" 
+                    <button id="btn-green" onclick="setColor('#00ff00')" class="tooltip"
                         data-tooltip="Pure green - check color accuracy">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')" 
+                    <button id="btn-blue" onclick="setColor('#0000ff')" class="tooltip"
                         data-tooltip="Pure blue - check color accuracy">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')" 
+                    <button id="btn-gray" onclick="setColor('#808080')" class="tooltip"
                         data-tooltip="50% gray - check for neutral gray">50% Gray</button>
                 </div>
             </div>
