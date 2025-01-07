@@ -202,22 +202,14 @@
         [data-tooltip] {
             position: relative;
             cursor: pointer;
-            --tooltip-bottom: 100%;
-            --tooltip-top: auto;
-            --tooltip-left: 50%;
-            --tooltip-right: auto;
-            --tooltip-transform: translateX(-50%);
-            --tooltip-margin: 0 0 5px 0;
         }
 
         [data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: var(--tooltip-bottom);
-            top: var(--tooltip-top);
-            left: var(--tooltip-left);
-            right: var(--tooltip-right);
-            transform: var(--tooltip-transform);
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
             padding: 5px 10px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
@@ -227,19 +219,12 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
-            margin: var(--tooltip-margin);
+            margin-bottom: 5px;
             z-index: 1000;
         }
 
         [data-tooltip]:hover::after {
             opacity: 1;
-        }
-
-        /* For touch devices */
-        @media (hover: none) {
-            [data-tooltip].has-tooltip::after {
-                opacity: 1;
-            }
         }
 
         .about-button {
@@ -604,84 +589,6 @@
                 case 't': setColor('#0000ff'); break;
                 case 'y': setColor('#808080'); break;
             }
-        });
-
-        // Handle tooltips for touch devices
-        document.querySelectorAll('[data-tooltip]').forEach(element => {
-            let longPressTimer;
-            const longPressDuration = 500; // 500ms for long press
-
-            // Handle touch start
-            element.addEventListener('touchstart', (e) => {
-                longPressTimer = setTimeout(() => {
-                    element.classList.add('has-tooltip');
-                }, longPressDuration);
-            }, { passive: true });
-
-            // Handle touch end and cancel
-            const cancelTooltip = () => {
-                clearTimeout(longPressTimer);
-                element.classList.remove('has-tooltip');
-            };
-
-            element.addEventListener('touchend', cancelTooltip, { passive: true });
-            element.addEventListener('touchcancel', cancelTooltip, { passive: true });
-            element.addEventListener('touchmove', cancelTooltip, { passive: true });
-
-            // Keep existing mouseenter handler for desktop
-            element.addEventListener('mouseenter', (e) => {
-                // Only run on non-touch devices
-                if (window.matchMedia('(hover: hover)').matches) {
-                    const tooltip = e.target;
-                    const tooltipText = tooltip.getAttribute('data-tooltip');
-                    
-                    // Create a temporary element to measure tooltip width
-                    const temp = document.createElement('div');
-                    temp.style.position = 'absolute';
-                    temp.style.visibility = 'hidden';
-                    temp.style.whiteSpace = 'nowrap';
-                    temp.style.padding = '5px 10px';
-                    temp.innerHTML = tooltipText;
-                    document.body.appendChild(temp);
-                    
-                    const tooltipWidth = temp.offsetWidth;
-                    const elementRect = tooltip.getBoundingClientRect();
-                    document.body.removeChild(temp);
-
-                    // Check if tooltip would go off the left or right edge
-                    const viewportWidth = window.innerWidth;
-                    const centerX = elementRect.left + (elementRect.width / 2);
-                    const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > viewportWidth;
-                    const wouldOverflowLeft = (centerX - (tooltipWidth / 2)) < 0;
-                    
-                    // Check if tooltip would go off the top
-                    const wouldOverflowTop = elementRect.top < 40;
-
-                    if (wouldOverflowTop) {
-                        tooltip.style.setProperty('--tooltip-bottom', 'auto');
-                        tooltip.style.setProperty('--tooltip-top', '100%');
-                        tooltip.style.setProperty('--tooltip-margin', '5px 0 0 0');
-                    } else {
-                        tooltip.style.setProperty('--tooltip-bottom', '100%');
-                        tooltip.style.setProperty('--tooltip-top', 'auto');
-                        tooltip.style.setProperty('--tooltip-margin', '0 0 5px 0');
-                    }
-
-                    if (wouldOverflowRight) {
-                        tooltip.style.setProperty('--tooltip-left', 'auto');
-                        tooltip.style.setProperty('--tooltip-right', '0');
-                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
-                    } else if (wouldOverflowLeft) {
-                        tooltip.style.setProperty('--tooltip-left', '0');
-                        tooltip.style.setProperty('--tooltip-right', 'auto');
-                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
-                    } else {
-                        tooltip.style.setProperty('--tooltip-left', '50%');
-                        tooltip.style.setProperty('--tooltip-right', 'auto');
-                        tooltip.style.setProperty('--tooltip-transform', 'translateX(-50%)');
-                    }
-                }
-            });
         });
 
         // Modal functions
