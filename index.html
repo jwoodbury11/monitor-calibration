@@ -88,14 +88,9 @@
             z-index: 100;
             border-radius: 0 0 10px 0;
             transition: opacity 0.3s;
-            overflow: visible; /* Allow tooltips to overflow */
+            overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-
-        .controls-inner {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .controls h3 {
@@ -368,32 +363,30 @@
 <body>
     <div class="container">
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
-            <div class="controls-inner">
-                <h3>Monitor Calibration Tool</h3>
-                <div class="controls-buttons">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
-                        data-tooltip="Compare multiple colors at once">Color Blocks</button>
-                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
-                        data-tooltip="Full screen single color display">Solid Colors</button>
-                    <button id="btn-gradient" onclick="showTest('gradient')" 
-                        data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
-                    <button id="btn-text" onclick="showTest('text')" 
-                        data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
-                </div>
-                <div id="color-controls" class="hide">
-                    <button id="btn-black" onclick="setColor('#000000')" 
-                        data-tooltip="Pure black - check for deep blacks">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')" 
-                        data-tooltip="Pure white - check for brightness">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')" 
-                        data-tooltip="Pure red - check color accuracy">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')" 
-                        data-tooltip="Pure green - check color accuracy">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')" 
-                        data-tooltip="Pure blue - check color accuracy">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')" 
-                        data-tooltip="50% gray - check for neutral gray">50% Gray</button>
-                </div>
+            <h3>Monitor Calibration Tool</h3>
+            <div class="controls-buttons">
+                <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                    data-tooltip="Compare multiple colors at once">Color Blocks</button>
+                <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                    data-tooltip="Full screen single color display">Solid Colors</button>
+                <button id="btn-gradient" onclick="showTest('gradient')" 
+                    data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
+                <button id="btn-text" onclick="showTest('text')" 
+                    data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
+            </div>
+            <div id="color-controls" class="hide">
+                <button id="btn-black" onclick="setColor('#000000')" 
+                    data-tooltip="Pure black - check for deep blacks">Black</button>
+                <button id="btn-white" onclick="setColor('#ffffff')" 
+                    data-tooltip="Pure white - check for brightness">White</button>
+                <button id="btn-red" onclick="setColor('#ff0000')" 
+                    data-tooltip="Pure red - check color accuracy">Red</button>
+                <button id="btn-green" onclick="setColor('#00ff00')" 
+                    data-tooltip="Pure green - check color accuracy">Green</button>
+                <button id="btn-blue" onclick="setColor('#0000ff')" 
+                    data-tooltip="Pure blue - check color accuracy">Blue</button>
+                <button id="btn-gray" onclick="setColor('#808080')" 
+                    data-tooltip="50% gray - check for neutral gray">50% Gray</button>
             </div>
         </div>
 
@@ -470,32 +463,29 @@
             clearTimeout(dimTimer);
             controls.style.opacity = '1';
             
-            // Always set the dim timer
-            dimTimer = setTimeout(() => {
-                controls.style.opacity = '0.2';
-            }, 2000);
+            // Only set dimming timer on touch devices
+            if (!window.matchMedia('(hover: hover)').matches) {
+                dimTimer = setTimeout(() => {
+                    controls.style.opacity = '0.2';
+                }, 2000);
+            }
         }
 
-        // Add interaction listeners for all devices
+        // Add touch listeners for mobile
         controls.addEventListener('touchstart', resetDimTimer, { passive: true });
         controls.addEventListener('touchmove', resetDimTimer, { passive: true });
-        controls.addEventListener('click', resetDimTimer, { passive: true });
-        controls.addEventListener('mousemove', resetDimTimer, { passive: true });
         
-        // Desktop hover behavior
-        if (window.matchMedia('(hover: hover)').matches) {
-            controls.addEventListener('mouseenter', () => {
+        // Keep existing mouse listeners for desktop
+        controls.onmouseenter = () => {
+            if (window.matchMedia('(hover: hover)').matches) {
                 controls.style.opacity = '1';
-                clearTimeout(dimTimer);
-            });
-            
-            controls.addEventListener('mouseleave', () => {
+            }
+        };
+        controls.onmouseleave = () => {
+            if (window.matchMedia('(hover: hover)').matches) {
                 controls.style.opacity = '0.2';
-            });
-        }
-
-        // Start dimmed
-        controls.style.opacity = '0.2';
+            }
+        };
 
         // Show selected test with analytics
         function showTest(testId) {
