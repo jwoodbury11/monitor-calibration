@@ -67,11 +67,22 @@
             min-width: min-content; /* Ensures buttons don't shrink */
         }
 
+        .button-row {
+            display: flex;
+            gap: 5px;
+            min-width: min-content;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* Hide scrollbar but keep functionality */
-        .controls::-webkit-scrollbar {
+        .controls::-webkit-scrollbar,
+        .button-row::-webkit-scrollbar {
             display: none;
         }
-        .controls {
+        .controls,
+        .button-row {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
@@ -210,20 +221,20 @@
                     data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
                 <button id="btn-text" onclick="showTest('text')" 
                     data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
-                <div id="color-controls" class="hide">
-                    <button id="btn-black" onclick="setColor('#000000')" 
-                        data-tooltip="Pure black - check for deep blacks">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')" 
-                        data-tooltip="Pure white - check for brightness">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')" 
-                        data-tooltip="Pure red - check color accuracy">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')" 
-                        data-tooltip="Pure green - check color accuracy">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')" 
-                        data-tooltip="Pure blue - check color accuracy">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')" 
-                        data-tooltip="50% gray - check for neutral gray">50% Gray</button>
-                </div>
+            </div>
+            <div id="color-controls" class="hide">
+                <button id="btn-black" onclick="setColor('#000000')" 
+                    data-tooltip="Pure black - check for deep blacks">Black</button>
+                <button id="btn-white" onclick="setColor('#ffffff')" 
+                    data-tooltip="Pure white - check for brightness">White</button>
+                <button id="btn-red" onclick="setColor('#ff0000')" 
+                    data-tooltip="Pure red - check color accuracy">Red</button>
+                <button id="btn-green" onclick="setColor('#00ff00')" 
+                    data-tooltip="Pure green - check color accuracy">Green</button>
+                <button id="btn-blue" onclick="setColor('#0000ff')" 
+                    data-tooltip="Pure blue - check color accuracy">Blue</button>
+                <button id="btn-gray" onclick="setColor('#808080')" 
+                    data-tooltip="50% gray - check for neutral gray">50% Gray</button>
             </div>
         </div>
 
