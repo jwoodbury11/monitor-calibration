@@ -202,16 +202,22 @@
         [data-tooltip] {
             position: relative;
             cursor: pointer;
+            --tooltip-bottom: 100%;
+            --tooltip-top: auto;
+            --tooltip-left: 50%;
+            --tooltip-right: auto;
+            --tooltip-transform: translateX(-50%);
+            --tooltip-margin: 0 0 5px 0;
         }
 
         [data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: var(--tooltip-bottom, 100%);
-            top: var(--tooltip-top, auto);
-            left: var(--tooltip-left, 50%);
-            right: var(--tooltip-right, auto);
-            transform: var(--tooltip-transform, translateX(-50%));
+            bottom: var(--tooltip-bottom);
+            top: var(--tooltip-top);
+            left: var(--tooltip-left);
+            right: var(--tooltip-right);
+            transform: var(--tooltip-transform);
             padding: 5px 10px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
@@ -221,7 +227,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
-            margin: var(--tooltip-margin, 0 0 5px 0);
+            margin: var(--tooltip-margin);
             z-index: 1000;
         }
 
