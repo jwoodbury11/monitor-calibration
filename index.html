@@ -201,12 +201,16 @@
         /* Tooltip styles */
         [data-tooltip] {
             position: relative;
-            touch-action: manipulation; /* Improve touch handling */
+            touch-action: manipulation;
         }
 
         [data-tooltip]:before {
             content: attr(data-tooltip);
             position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
             padding: 5px 10px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
@@ -215,33 +219,26 @@
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.2s;
             pointer-events: none;
-            /* Default positions using CSS variables */
-            bottom: var(--tooltip-bottom, 100%);
-            top: var(--tooltip-top, auto);
-            left: var(--tooltip-left, 50%);
-            right: var(--tooltip-right, auto);
-            transform: var(--tooltip-transform, translateX(-50%));
-            margin: var(--tooltip-margin, 0 0 5px 0);
+            transition: all 0.2s;
             z-index: 1000;
         }
 
-        /* Only show hover tooltips on non-touch devices */
-        @media (hover: hover) and (pointer: fine) {
+        /* Desktop hover */
+        @media (hover: hover) {
             [data-tooltip]:hover:before {
                 opacity: 1;
                 visibility: visible;
             }
         }
 
-        /* Show tooltip when has-tooltip class is present (added by JS for touch) */
+        /* Mobile touch */
         [data-tooltip].has-tooltip:before {
             opacity: 1;
             visibility: visible;
         }
 
-        /* Add JavaScript to handle tooltip positioning */
+        /* Dynamic positioning will be handled by JavaScript */
 
         .about-button {
             position: fixed;
