@@ -99,7 +99,6 @@
 
         .controls-buttons {
             display: flex;
-            flex-direction: column;
             gap: 5px;
             min-width: min-content; /* Ensures buttons don't shrink */
         }
@@ -113,31 +112,12 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .button-row button {
-            margin: 5px;
-            padding: 8px 12px;
-            border: none;
-            background: #444;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            position: relative;
-        }
-
-        .button-row button:hover {
-            background: #666;
-        }
-
-        .button-row button.selected {
-            background: #2196F3;
-            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
-        }
-
         /* Hide scrollbar but keep functionality */
+        .controls::-webkit-scrollbar,
         .button-row::-webkit-scrollbar {
             display: none;
         }
+        .controls,
         .button-row {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -219,19 +199,49 @@
             display: none;
         }
 
-        /* Super simple tooltip test */
-        #btn-color-blocks:hover:after {
-            content: "Test tooltip";
-            position: absolute;
-            background: #000;
-            color: #fff;
-            padding: 4px 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            top: -25px;
-            z-index: 9999;
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            touch-action: manipulation; /* Improve touch handling */
         }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            /* Default positions using CSS variables */
+            bottom: var(--tooltip-bottom, 100%);
+            top: var(--tooltip-top, auto);
+            left: var(--tooltip-left, 50%);
+            right: var(--tooltip-right, auto);
+            transform: var(--tooltip-transform, translateX(-50%));
+            margin: var(--tooltip-margin, 0 0 5px 0);
+            z-index: 1000;
+        }
+
+        /* Only show hover tooltips on non-touch devices */
+        @media (hover: hover) {
+            [data-tooltip]:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        /* Show tooltip when has-tooltip class is present (added by JS for touch) */
+        [data-tooltip].has-tooltip:before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Add JavaScript to handle tooltip positioning */
 
         .about-button {
             position: fixed;
@@ -355,74 +365,30 @@
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
-                <div class="button-row">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
-                        title="Compare multiple colors at once">Color Blocks</button>
-                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
-                        title="Full screen single color display">Solid Colors</button>
-                    <button id="btn-gradient" onclick="showTest('gradient')" 
-                        title="Test smooth transitions from black to white">Gradient Test</button>
-                    <button id="btn-text" onclick="showTest('text')" 
-                        title="Check text clarity and sharpness">Text Sharpness</button>
-                </div>
-                <div id="color-controls" class="button-row hide">
-                    <button id="btn-black" onclick="setColor('#000000')" 
-                        title="Pure black - check for deep blacks">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')" 
-                        title="Pure white - check for brightness">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')" 
-                        title="Pure red - check color accuracy">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')" 
-                        title="Pure green - check color accuracy">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')" 
-                        title="Pure blue - check color accuracy">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')" 
-                        title="50% gray - check for neutral gray">50% Gray</button>
-                </div>
+                <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                    data-tooltip="Compare multiple colors at once">Color Blocks</button>
+                <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                    data-tooltip="Full screen single color display">Solid Colors</button>
+                <button id="btn-gradient" onclick="showTest('gradient')" 
+                    data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
+                <button id="btn-text" onclick="showTest('text')" 
+                    data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
+            </div>
+            <div id="color-controls" class="hide">
+                <button id="btn-black" onclick="setColor('#000000')" 
+                    data-tooltip="Pure black - check for deep blacks">Black</button>
+                <button id="btn-white" onclick="setColor('#ffffff')" 
+                    data-tooltip="Pure white - check for brightness">White</button>
+                <button id="btn-red" onclick="setColor('#ff0000')" 
+                    data-tooltip="Pure red - check color accuracy">Red</button>
+                <button id="btn-green" onclick="setColor('#00ff00')" 
+                    data-tooltip="Pure green - check color accuracy">Green</button>
+                <button id="btn-blue" onclick="setColor('#0000ff')" 
+                    data-tooltip="Pure blue - check color accuracy">Blue</button>
+                <button id="btn-gray" onclick="setColor('#808080')" 
+                    data-tooltip="50% gray - check for neutral gray">50% Gray</button>
             </div>
         </div>
-
-        <!-- SEO-optimized content (hidden by default but visible to search engines) -->
-        <div class="seo-content">
-            <h1>Free Monitor Calibration Tool</h1>
-            <p>Welcome to the free online monitor calibration tool. This website helps you calibrate your monitor's colors, contrast, and text sharpness without any software installation required. Perfect for matching external displays to your MacBook or ensuring consistent colors across multiple screens.</p>
-            
-            <h2>Features of Our Free Monitor Calibration Website</h2>
-            <ul>
-                <li>Color Block Comparison - Compare multiple color blocks to check color accuracy</li>
-                <li>Solid Color Tests - Full-screen color display for precise calibration</li>
-                <li>Gradient Test - Check for smooth color transitions</li>
-                <li>Text Sharpness - Optimize text clarity and readability</li>
-            </ul>
-
-            <h2>Why Use Our Monitor Calibration Tool?</h2>
-            <ul>
-                <li>100% Free - No registration or download required</li>
-                <li>Works Instantly - Open in any web browser</li>
-                <li>Industry standard colors - sRGB, D65, gamma 2.2</li>
-                <li>Easy to Use - Simple interface with helpful tooltips</li>
-                <li>Cross-Platform - Works on any device or operating system</li>
-            </ul>
-        </div>
-
-        <style>
-            .seo-content {
-                position: absolute;
-                width: 1px;
-                height: 1px;
-                padding: 0;
-                margin: -1px;
-                overflow: hidden;
-                clip: rect(0, 0, 0, 0);
-                white-space: nowrap;
-                border: 0;
-            }
-            @media (max-width: 600px) {
-                .seo-content {
-                    display: none;
-                }
-            }
-        </style>
 
         <div id="solid-colors" class="test-area"></div>
         
@@ -595,6 +561,84 @@
                 case 't': setColor('#0000ff'); break;
                 case 'y': setColor('#808080'); break;
             }
+        });
+
+        // Handle tooltips for touch devices
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            let longPressTimer;
+            const longPressDuration = 500; // 500ms for long press
+
+            // Handle touch start
+            element.addEventListener('touchstart', (e) => {
+                longPressTimer = setTimeout(() => {
+                    element.classList.add('has-tooltip');
+                }, longPressDuration);
+            }, { passive: true });
+
+            // Handle touch end and cancel
+            const cancelTooltip = () => {
+                clearTimeout(longPressTimer);
+                element.classList.remove('has-tooltip');
+            };
+
+            element.addEventListener('touchend', cancelTooltip, { passive: true });
+            element.addEventListener('touchcancel', cancelTooltip, { passive: true });
+            element.addEventListener('touchmove', cancelTooltip, { passive: true });
+
+            // Keep existing mouseenter handler for desktop
+            element.addEventListener('mouseenter', (e) => {
+                // Only run on non-touch devices
+                if (window.matchMedia('(hover: hover)').matches) {
+                    const tooltip = e.target;
+                    const tooltipText = tooltip.getAttribute('data-tooltip');
+                    
+                    // Create a temporary element to measure tooltip width
+                    const temp = document.createElement('div');
+                    temp.style.position = 'absolute';
+                    temp.style.visibility = 'hidden';
+                    temp.style.whiteSpace = 'nowrap';
+                    temp.style.padding = '5px 10px';
+                    temp.innerHTML = tooltipText;
+                    document.body.appendChild(temp);
+                    
+                    const tooltipWidth = temp.offsetWidth;
+                    const elementRect = tooltip.getBoundingClientRect();
+                    document.body.removeChild(temp);
+
+                    // Check if tooltip would go off the left or right edge
+                    const viewportWidth = window.innerWidth;
+                    const centerX = elementRect.left + (elementRect.width / 2);
+                    const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > viewportWidth;
+                    const wouldOverflowLeft = (centerX - (tooltipWidth / 2)) < 0;
+                    
+                    // Check if tooltip would go off the top
+                    const wouldOverflowTop = elementRect.top < 40;
+
+                    if (wouldOverflowTop) {
+                        tooltip.style.setProperty('--tooltip-bottom', 'auto');
+                        tooltip.style.setProperty('--tooltip-top', '100%');
+                        tooltip.style.setProperty('--tooltip-margin', '5px 0 0 0');
+                    } else {
+                        tooltip.style.setProperty('--tooltip-bottom', '100%');
+                        tooltip.style.setProperty('--tooltip-top', 'auto');
+                        tooltip.style.setProperty('--tooltip-margin', '0 0 5px 0');
+                    }
+
+                    if (wouldOverflowRight) {
+                        tooltip.style.setProperty('--tooltip-left', 'auto');
+                        tooltip.style.setProperty('--tooltip-right', '0');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
+                    } else if (wouldOverflowLeft) {
+                        tooltip.style.setProperty('--tooltip-left', '0');
+                        tooltip.style.setProperty('--tooltip-right', 'auto');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(0)');
+                    } else {
+                        tooltip.style.setProperty('--tooltip-left', '50%');
+                        tooltip.style.setProperty('--tooltip-right', 'auto');
+                        tooltip.style.setProperty('--tooltip-transform', 'translateX(-50%)');
+                    }
+                }
+            });
         });
 
         // Modal functions
