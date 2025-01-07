@@ -113,6 +113,27 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        .button-row button {
+            margin: 5px;
+            padding: 8px 12px;
+            border: none;
+            background: #444;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .button-row button:hover {
+            background: #666;
+        }
+
+        .button-row button.selected {
+            background: #2196F3;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+        }
+
         /* Hide scrollbar but keep functionality */
         .button-row::-webkit-scrollbar {
             display: none;
@@ -205,7 +226,11 @@
             background: #000;
             color: #fff;
             padding: 4px 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
             top: -25px;
+            z-index: 9999;
         }
 
         .about-button {
