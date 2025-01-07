@@ -216,6 +216,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.2s;
+            pointer-events: none;
             /* Default positions using CSS variables */
             bottom: var(--tooltip-bottom, 100%);
             top: var(--tooltip-top, auto);
@@ -227,7 +228,7 @@
         }
 
         /* Only show hover tooltips on non-touch devices */
-        @media (hover: hover) {
+        @media (hover: hover) and (pointer: fine) {
             [data-tooltip]:hover:before {
                 opacity: 1;
                 visibility: visible;
