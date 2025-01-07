@@ -198,30 +198,28 @@
             display: none;
         }
 
-        /* Tooltip styles - fixed implementation */
+        /* Tooltip styles - back to working version */
         .tooltip {
             position: relative;
             display: inline-block;
         }
 
-        .tooltip:hover::after {
+        .tooltip:hover::before {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 100%;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
-            margin-bottom: 5px;
-            padding: 8px 12px;
-            background: rgba(0, 0, 0, 0.8);
+            background: black;
             color: white;
+            padding: 8px 12px;
             border-radius: 4px;
             font-size: 14px;
             white-space: nowrap;
             z-index: 9999;
-            pointer-events: none;
         }
 
-        /* Remove test tooltip container and button styles */
+        /* Remove test tooltip */
         .test-tooltip-container,
         .test-button {
             display: none;
