@@ -198,23 +198,6 @@
             display: none;
         }
 
-        /* Simple tooltip */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltip:hover:before {
-            content: "Compare multiple colors at once";
-            position: absolute;
-            background: black;
-            color: white;
-            padding: 5px;
-            border-radius: 4px;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
         .about-button {
             position: fixed;
             bottom: 10px;
@@ -338,18 +321,28 @@
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
                 <div class="button-row">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected tooltip">Color Blocks</button>
-                    <button id="btn-solid-colors" onclick="showTest('solid-colors')">Solid Colors</button>
-                    <button id="btn-gradient" onclick="showTest('gradient')">Gradient Test</button>
-                    <button id="btn-text" onclick="showTest('text')">Text Sharpness</button>
+                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
+                        title="Compare multiple colors at once">Color Blocks</button>
+                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
+                        title="Full screen single color display">Solid Colors</button>
+                    <button id="btn-gradient" onclick="showTest('gradient')" 
+                        title="Test smooth transitions from black to white">Gradient Test</button>
+                    <button id="btn-text" onclick="showTest('text')" 
+                        title="Check text clarity and sharpness">Text Sharpness</button>
                 </div>
                 <div id="color-controls" class="button-row hide">
-                    <button id="btn-black" onclick="setColor('#000000')">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')">50% Gray</button>
+                    <button id="btn-black" onclick="setColor('#000000')" 
+                        title="Pure black - check for deep blacks">Black</button>
+                    <button id="btn-white" onclick="setColor('#ffffff')" 
+                        title="Pure white - check for brightness">White</button>
+                    <button id="btn-red" onclick="setColor('#ff0000')" 
+                        title="Pure red - check color accuracy">Red</button>
+                    <button id="btn-green" onclick="setColor('#00ff00')" 
+                        title="Pure green - check color accuracy">Green</button>
+                    <button id="btn-blue" onclick="setColor('#0000ff')" 
+                        title="Pure blue - check color accuracy">Blue</button>
+                    <button id="btn-gray" onclick="setColor('#808080')" 
+                        title="50% gray - check for neutral gray">50% Gray</button>
                 </div>
             </div>
         </div>
