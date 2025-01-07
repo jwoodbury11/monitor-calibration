@@ -198,25 +198,31 @@
             display: none;
         }
 
-        /* Tooltip styles - back to working version */
-        .tooltip {
+        /* Tooltip styles - original working version */
+        [data-tooltip] {
             position: relative;
-            display: inline-block;
         }
 
-        .tooltip:hover::before {
+        [data-tooltip]:before {
             content: attr(data-tooltip);
             position: absolute;
-            top: -40px;
+            bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: black;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 8px 12px;
             border-radius: 4px;
             font-size: 14px;
             white-space: nowrap;
-            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Remove test tooltip */
@@ -348,27 +354,27 @@
             <h3>Monitor Calibration Tool</h3>
             <div class="controls-buttons">
                 <div class="button-row">
-                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected tooltip" 
+                    <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
                         data-tooltip="Compare multiple colors at once">Color Blocks</button>
-                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" class="tooltip"
+                    <button id="btn-solid-colors" onclick="showTest('solid-colors')" 
                         data-tooltip="Full screen single color display">Solid Colors</button>
-                    <button id="btn-gradient" onclick="showTest('gradient')" class="tooltip"
+                    <button id="btn-gradient" onclick="showTest('gradient')" 
                         data-tooltip="Test smooth transitions from black to white">Gradient Test</button>
-                    <button id="btn-text" onclick="showTest('text')" class="tooltip"
+                    <button id="btn-text" onclick="showTest('text')" 
                         data-tooltip="Check text clarity and sharpness">Text Sharpness</button>
                 </div>
                 <div id="color-controls" class="button-row hide">
-                    <button id="btn-black" onclick="setColor('#000000')" class="tooltip"
+                    <button id="btn-black" onclick="setColor('#000000')" 
                         data-tooltip="Pure black - check for deep blacks">Black</button>
-                    <button id="btn-white" onclick="setColor('#ffffff')" class="tooltip"
+                    <button id="btn-white" onclick="setColor('#ffffff')" 
                         data-tooltip="Pure white - check for brightness">White</button>
-                    <button id="btn-red" onclick="setColor('#ff0000')" class="tooltip"
+                    <button id="btn-red" onclick="setColor('#ff0000')" 
                         data-tooltip="Pure red - check color accuracy">Red</button>
-                    <button id="btn-green" onclick="setColor('#00ff00')" class="tooltip"
+                    <button id="btn-green" onclick="setColor('#00ff00')" 
                         data-tooltip="Pure green - check color accuracy">Green</button>
-                    <button id="btn-blue" onclick="setColor('#0000ff')" class="tooltip"
+                    <button id="btn-blue" onclick="setColor('#0000ff')" 
                         data-tooltip="Pure blue - check color accuracy">Blue</button>
-                    <button id="btn-gray" onclick="setColor('#808080')" class="tooltip"
+                    <button id="btn-gray" onclick="setColor('#808080')" 
                         data-tooltip="50% gray - check for neutral gray">50% Gray</button>
                 </div>
             </div>
