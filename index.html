@@ -603,12 +603,14 @@
                     
                     const tooltipWidth = temp.offsetWidth;
                     const elementRect = tooltip.getBoundingClientRect();
+                    const containerRect = document.querySelector('.controls').getBoundingClientRect();
                     document.body.removeChild(temp);
 
-                    // Check if tooltip would go off the left or right edge
-                    const viewportWidth = window.innerWidth;
-                    const centerX = elementRect.left + (elementRect.width / 2);
-                    const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > viewportWidth;
+                    // Check if tooltip would go off the left or right edge of the container
+                    const containerWidth = containerRect.width;
+                    const elementXInContainer = elementRect.left - containerRect.left;
+                    const centerX = elementXInContainer + (elementRect.width / 2);
+                    const wouldOverflowRight = (centerX + (tooltipWidth / 2)) > containerWidth;
                     const wouldOverflowLeft = (centerX - (tooltipWidth / 2)) < 0;
                     
                     // Check if tooltip would go off the top
