@@ -89,9 +89,6 @@
             z-index: 100;
             border-radius: 0 0 10px 0;
             transition: opacity 0.3s;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
 
         .controls h3 {
@@ -104,6 +101,7 @@
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 10px;
+            white-space: nowrap;
         }
 
         .how-to-button {
@@ -159,6 +157,9 @@
             display: flex;
             gap: 5px;
             min-width: min-content; /* Ensures buttons don't shrink */
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
 
         .button-row {
@@ -171,11 +172,11 @@
         }
 
         /* Hide scrollbar but keep functionality */
-        .controls::-webkit-scrollbar,
+        .controls-buttons::-webkit-scrollbar,
         .button-row::-webkit-scrollbar {
             display: none;
         }
-        .controls,
+        .controls-buttons,
         .button-row {
             -ms-overflow-style: none;
             scrollbar-width: none;
