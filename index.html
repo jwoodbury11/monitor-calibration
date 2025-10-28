@@ -214,10 +214,15 @@
         }
 
         .color-blocks {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            display: flex;
+            flex-direction: row;
             width: 100%;
             height: 100vh;
+        }
+
+        .color-blocks > div {
+            flex: 1;
+            min-width: 1px;
         }
 
         .text-test {
