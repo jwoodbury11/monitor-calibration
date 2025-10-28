@@ -98,6 +98,38 @@
             margin: 0 5px 10px 5px;
         }
 
+        .controls-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .how-to-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+
+        .how-to-button:hover {
+            background: #1976D2;
+        }
+
+        .how-to-button svg {
+            width: 14px;
+            height: 14px;
+        }
+
         .controls-buttons {
             display: flex;
             gap: 5px;
@@ -375,12 +407,55 @@
         .close-modal:hover {
             color: #333;
         }
+
+        .how-to-modal .modal-content {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .qr-code-container {
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .qr-code-container img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .qr-label {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .how-to-steps {
+            text-align: left;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="controls" onmouseleave="this.style.opacity='0.2';" onmouseenter="this.style.opacity='1';">
-            <h3>Monitor Calibration Tool</h3>
+            <div class="controls-header">
+                <h3>Monitor Calibration Tool</h3>
+                <button class="how-to-button" onclick="showHowToModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    How to use
+                </button>
+            </div>
             <div class="controls-buttons">
                 <button id="btn-color-blocks" onclick="showTest('color-blocks')" class="selected" 
                     data-tooltip="Compare multiple colors at once">Color Blocks</button>
@@ -441,6 +516,28 @@
     </div>
 
     <button class="about-button" onclick="showModal()">?</button>
+
+    <div class="modal how-to-modal" onclick="hideHowToModal(event)">
+        <div class="modal-content">
+            <button class="close-modal" onclick="hideHowToModal(event)">×</button>
+            <h1>How to Calibrate Your Monitor</h1>
+            <div class="how-to-steps">
+                <p><strong>Step 1:</strong> Open this website on your external monitor (the one you want to calibrate)</p>
+                <p><strong>Step 2:</strong> Open the same website on your Apple iPhone, iPad, or MacBook (devices with factory-calibrated displays)</p>
+                <p><strong>Step 3:</strong> Place both screens side-by-side and compare the colors</p>
+                <p><strong>Step 4:</strong> Adjust your monitor's color settings until they match your Apple device</p>
+            </div>
+            
+            <div class="qr-code-container">
+                <img id="qr-code-img" src="" alt="QR Code">
+                <div class="qr-label">Scan to open on your mobile device</div>
+            </div>
+            
+            <p style="font-size: 14px; color: #666; margin-top: 20px;">
+                <em>Note: Apple devices are recommended as reference devices because they come with factory-calibrated displays that follow industry standards (sRGB, D65 white point, gamma 2.2).</em>
+            </p>
+        </div>
+    </div>
 
     <div class="modal" onclick="hideModal(event)">
         <div class="modal-content">
@@ -670,9 +767,35 @@
             });
         });
 
-        // Modal functions
+        // Generate QR code for the website URL
+        function generateQRCode() {
+            const url = window.location.href.split('?')[0]; // Get base URL without query params
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            document.getElementById('qr-code-img').src = qrApiUrl;
+        }
+
+        // How to Use Modal functions
+        function showHowToModal() {
+            const modal = document.querySelector('.how-to-modal');
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
+            generateQRCode();
+            gtag('event', 'view_how_to', {
+                'event_category': 'engagement'
+            });
+        }
+
+        function hideHowToModal(event) {
+            if (event.target.classList.contains('modal') || event.target.classList.contains('close-modal')) {
+                const modal = document.querySelector('.how-to-modal');
+                modal.classList.remove('show');
+                setTimeout(() => modal.style.display = 'none', 300);
+            }
+        }
+
+        // About Modal functions
         function showModal() {
-            const modal = document.querySelector('.modal');
+            const modal = document.querySelectorAll('.modal')[1]; // Get the second modal (about modal)
             modal.style.display = 'block';
             setTimeout(() => modal.classList.add('show'), 10);
             gtag('event', 'view_about', {
@@ -682,7 +805,7 @@
 
         function hideModal(event) {
             if (event.target.classList.contains('modal') || event.target.classList.contains('close-modal')) {
-                const modal = document.querySelector('.modal');
+                const modal = document.querySelectorAll('.modal')[1]; // Get the second modal (about modal)
                 modal.classList.remove('show');
                 setTimeout(() => modal.style.display = 'none', 300);
             }
