@@ -107,27 +107,40 @@
         }
 
         .how-to-button {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 6px 12px;
-            background: #2196F3;
-            color: white;
-            border: none;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: transparent;
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             cursor: pointer;
             font-size: 13px;
             white-space: nowrap;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+            line-height: 1.2;
+            height: 32px;
         }
 
         .how-to-button:hover {
-            background: #1976D2;
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #fff;
         }
 
         .how-to-button svg {
             width: 14px;
             height: 14px;
+            flex-shrink: 0;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .how-to-button span {
+            display: block;
+            line-height: 1;
+            margin-top: 5px;
         }
 
         .controls-buttons {
@@ -453,7 +466,7 @@
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                    How to use
+                    <span>How to use</span>
                 </button>
             </div>
             <div class="controls-buttons">
@@ -522,7 +535,7 @@
             <button class="close-modal" onclick="hideHowToModal(event)">×</button>
             <h1>How to Calibrate Your Monitor</h1>
             <div class="how-to-steps">
-                <p><strong>Step 1:</strong> Open this website on your external monitor (the one you want to calibrate)</p>
+                <p><strong>Step 1:</strong> Open this website on the computer monitor you want to calibrate</p>
                 <p><strong>Step 2:</strong> Open the same website on your Apple iPhone, iPad, or MacBook (devices with factory-calibrated displays)</p>
                 <p><strong>Step 3:</strong> Place both screens side-by-side and compare the colors</p>
                 <p><strong>Step 4:</strong> Adjust your monitor's color settings until they match your Apple device</p>
@@ -769,8 +782,10 @@
 
         // Generate QR code for the website URL
         function generateQRCode() {
-            const url = window.location.href.split('?')[0]; // Get base URL without query params
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            // Use the production URL directly for consistent QR code
+            const url = 'https://monitorcalibrationtool.com';
+            // Use goqr.me API which generates direct QR codes without redirect
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&format=png&data=${encodeURIComponent(url)}`;
             document.getElementById('qr-code-img').src = qrApiUrl;
         }
 
